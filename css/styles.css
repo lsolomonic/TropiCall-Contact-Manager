@@ -1,0 +1,94 @@
+body
+{
+    background-image: url('img/bg.png');
+    background-repeat: no-repeat;
+    background-size:cover;
+}
+
+#title
+{
+    font-size: 60px;
+    width: 100%;
+    margin: 2% 5%;
+    font-family: 'Ubuntu';
+    color: #D9D9D9;
+}
+
+#about
+{
+    font-size: 30px;
+    color: #D9D9D9;
+    font-family: 'Ubuntu';
+    margin-left: 80%;
+    margin-top: -4.3%;
+}
+
+#loginDiv
+{
+    font-size: 30px;
+    width: 425px;
+    height: 613px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 25px; 
+    background-color: #D9D9D9;
+    opacity: 90%;
+    text-align: center;
+    border-radius: 25px;
+}
+
+#inner-title
+{
+    font-size: 60px;
+    color: #000000;
+    font-family: 'Ubuntu';
+}
+
+#reg
+{
+    margin-top: 20%;
+    font-size: 20px; 
+    font-family: 'Ubuntu';
+    color: #00f;
+    text-decoration: underline;
+}
+
+#userName, #userPW
+{
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 10%;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 40px;
+    margin-top: 7.5%;
+}
+
+#userName:focus, #userPW:focus
+{
+    outline:2px ridge green;
+}
+
+
+.buttons
+{
+    font-size: 36px;
+    border-radius: 25px;
+    width: 50%;
+    margin-right: auto;
+    margin-left: auto; 
+    font-family: 'Ubuntu'; 
+    background-color: #8BC349;
+    color: #D9D9D9;
+}
+
+.buttons:hover
+{
+    background-color: #577830;
+}
+
+#loginButton
+{
+    margin-top: 7.5%;
+}
