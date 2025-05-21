@@ -48,8 +48,8 @@ body
 
 #nav
 {
-    width: 275px;
-    height: 613px;
+    width: 15%;
+    height: 70%;
     padding: 25px; 
     margin-top: 50px;
     margin-left: 5%;
@@ -70,7 +70,7 @@ body
 #list
 {
     width: 60%;
-    height: 613px;
+    height: 70%;
     padding: 25px; 
     margin-top: 50px;
     margin-right: 75px;
@@ -81,10 +81,12 @@ body
     font-family: 'Ubuntu';
     float: right;
 }
+
 #sTex
 {
     font-size: 40px;
 }
+
 #search
 {
     width: 60%;
@@ -96,7 +98,7 @@ body
 
 #logOut
 {
-    margin-top: 120%;
+    bottom: 0;
 }
 
 hr {
@@ -159,4 +161,15 @@ hr {
 #loginButton
 {
     margin-top: 7.5%;
+}
+
+#contactTable
+{
+    width: 100%; 
+    text-align: middle;
+}
+
+tr, th, td
+{
+    border: 2px solid black;
 }
