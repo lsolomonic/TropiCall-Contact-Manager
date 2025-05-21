@@ -14,6 +14,15 @@ body
     color: #D9D9D9;
 }
 
+#welcome
+{
+    font-size: 45px;
+    width: 100%;
+    margin-left: auto;
+    font-family: 'Ubuntu';
+    color: #D9D9D9;
+}
+
 #about
 {
     font-size: 30px;
@@ -36,6 +45,65 @@ body
     text-align: center;
     border-radius: 25px;
 }
+
+#nav
+{
+    width: 275px;
+    height: 613px;
+    padding: 25px; 
+    margin-top: 50px;
+    margin-left: 5%;
+    background-color: #D9D9D9;
+    opacity: 90%;
+    text-align: center;
+    border-radius: 25px;
+    font-family: 'Ubuntu';
+    float: left;
+}
+
+#menu
+{
+    font-size:60px; 
+    color: #000000;
+}
+
+#list
+{
+    width: 60%;
+    height: 613px;
+    padding: 25px; 
+    margin-top: 50px;
+    margin-right: 75px;
+    background-color: #D9D9D9;
+    opacity: 90%;
+    text-align: center;
+    border-radius: 25px;
+    font-family: 'Ubuntu';
+    float: right;
+}
+#sTex
+{
+    font-size: 40px;
+}
+#search
+{
+    width: 60%;
+    height: 10%;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 40px;
+}
+
+#logOut
+{
+    margin-top: 120%;
+}
+
+hr {
+    border: none;
+    height: 3px;
+    background-color: #333;
+  }
 
 #inner-title
 {

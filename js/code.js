@@ -87,3 +87,16 @@ function doRegister()
 {
     return;
 }
+
+function logOut()
+{
+    //delete cookies (todo)
+
+    //redirect to login page
+    window.location.href = "index.html";
+}
+
+function tempLogIn()
+{
+    window.location.href = "contacts.html";
+}
