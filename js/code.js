@@ -85,35 +85,5 @@ function doLogin()
 
 function doRegister()
 {
-    userId = 0;
-    firstName = "";
-    lastName = "";
-
-    let newName = document.getElementById("userName").value;
-    let newPW = document.getElementById("userPW").value;
-    document.getElementById("loginResult").innerHTML = "";
-
-    let tmp = {newName: newName, newPW: newPW};
-    let jsonPayloay = JSON.stringify(tmp);
-    let url = urlBase + '/Register.' + extension;
-
-    let xhr = new XMLHttpRequest();
-    xhr.open(method = "POST", url, async = true);
-
-    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-
-    try
-    {
-        if (this.readyState == 4 && this.status == 200)
-        {
-            let jsonObject = JSON.parse(xhr.responseText);
-            firstName = jsonObject.firstName;
-            lastName = jsonObject.lastName;
-
-            window.location.href = "index.html";
-        }
-    } catch (err)
-    {
-        document.getElementById("loginResult").innerHTML = err.message;
-    }
+    return;
 }
