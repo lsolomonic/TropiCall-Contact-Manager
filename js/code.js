@@ -148,3 +148,13 @@ function tempLogIn()
 {
     window.location.href = "contacts.html";
 }
+
+function search()
+{
+    return;
+}
+
+function fill_table()
+{
+    return;
+}
