@@ -85,6 +85,50 @@ function doLogin()
 
 function doRegister()
 {
+    userID = 0;
+    firstName = "";
+    lastName = "";
+
+    let login = document.getElementById("userName").value;
+    let password = document.getElementById("userPW").value;
+    //var hash = md5(password);
+    document.getElementById("loginResult").innerHTML = "";
+
+    let tmp = {login:login, password:password};
+    let jsonPayload = JSON.stringify(tmp);
+    let url = urlBase + '/Register.' + extension;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open(method = "POST", url, async = true);
+
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    try
+    {
+        xhr.onreadystatechange = function()
+        {
+            if (this.readyState == 4)
+            {
+                if (this.status == 409)
+                {
+                    document.getElementById("loginResult").innerHTML = "User already exists!";
+                }
+
+                if (this.status == 200)
+                {
+                    let jsonObject = xhr.parse(xhr.responseText);
+                    userId = jsonObject.id;
+                    document.getElementById("loginResult").innerHTML = "User added!";
+                    //save cookie
+                }
+            }
+        };
+        xhr.send(jsonPayload);  
+    } catch (err)
+    {
+        document.getElementById("loginResult").innerHTML = err.message;
+    }
+    
     return;
 }
 
