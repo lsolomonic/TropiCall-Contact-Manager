@@ -89,12 +89,13 @@ function doRegister()
     firstName = "";
     lastName = "";
 
-    let login = document.getElementById("userName").value;
+    //get inputs for new username and PW
+    let username = document.getElementById("userName").value;
     let password = document.getElementById("userPW").value;
     //var hash = md5(password);
     document.getElementById("loginResult").innerHTML = "";
 
-    let tmp = {login:login, password:password};
+    let tmp = {username:username, password:password};
     let jsonPayload = JSON.stringify(tmp);
     let url = urlBase + '/Register.' + extension;
 
@@ -107,19 +108,22 @@ function doRegister()
     {
         xhr.onreadystatechange = function()
         {
+            // if we receive a response from API
             if (this.readyState == 4)
             {
+                // if user already exists
                 if (this.status == 409)
                 {
                     document.getElementById("loginResult").innerHTML = "User already exists!";
                 }
 
+                // if async call finishes (user doesn't exist)
                 if (this.status == 200)
                 {
                     let jsonObject = xhr.parse(xhr.responseText);
                     userId = jsonObject.id;
                     document.getElementById("loginResult").innerHTML = "User added!";
-                    //save cookie
+                    //save cookie (todo)
                 }
             }
         };
@@ -128,7 +132,7 @@ function doRegister()
     {
         document.getElementById("loginResult").innerHTML = err.message;
     }
-    
+
     return;
 }
 
