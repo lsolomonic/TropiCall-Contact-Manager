@@ -34,53 +34,96 @@ function log_wrapper()
 
 function doLogin()
 {
-    userID = 0;
-    firstName = "";
-    lastName = "";
+	userId = 0;
+	firstName = "";
+	lastName = "";
+	
+	let login = document.getElementById("loginName").value;
+	let password = document.getElementById("loginPassword").value;
+//	var hash = md5( password );
+	
+	document.getElementById("loginResult").innerHTML = "";
 
-    let login = document.getElementById("userName").value;
-    let password = document.getElementById("userPW").value;
-    //var hash = md5(password);
-    document.getElementById("loginResult").innerHTML = "";
+	let tmp = {login:login,password:password};
+//	var tmp = {login:login,password:hash};
+	let jsonPayload = JSON.stringify( tmp );
+	
+	let url = urlBase + '/Login.' + extension;
 
-    let tmp = {login:login, password:password};
-    let jsonPayload = JSON.stringify(tmp);
-    let url = urlBase + '/Login.' + extension;
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function() 
+		{
+			if (this.readyState == 4 && this.status == 200) 
+			{
+				let jsonObject = JSON.parse( xhr.responseText );
+				userId = jsonObject.id;
+		
+				if( userId < 1 )
+				{		
+					document.getElementById("loginResult").innerHTML = "User/Password combination incorrect";
+					return;
+				}
+		
+				firstName = jsonObject.firstName;
+				lastName = jsonObject.lastName;
 
-    let xhr = new XMLHttpRequest();
-    xhr.open(method = "POST", url, async = true);
+				saveCookie();
+	
+				window.location.href = "contacts.html";
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		document.getElementById("loginResult").innerHTML = err.message;
+	}
 
-    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+}
 
-    try
-    {
-        xhr.onreadystatechange = function()
-        {
-            if (this.readyState == 4 && this.status == 200)
-            {
-                let jsonObject = JSON.parse(xhr.responseText);
-                userID = jsonObject.Object.id;
+function saveCookie()
+{
+	let minutes = 20;
+	let date = new Date();
+	date.setTime(date.getTime()+(minutes*60*1000));	
+	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ";expires=" + date.toGMTString();
+}
 
-                if (userID < 1)
-                {
-                    document.getElementById("loginResult").innerHTML = "Invalid login info";
-                    document.getElementById("userPW").textContent = "";
-                    return;
-                }
-
-                firstName = jsonObject.firstName;
-                lastName = jsonObject.lastName;
-                
-                //saveCookie();
-
-                window.location.href = "contacts.html";
-            }
-        };
-        xhr.send(jsonPayload);
-    } catch(err)
-    {
-        document.getElementById("loginResult").innerHTML = err.message;
-    }
+function readCookie()
+{
+	userId = -1;
+	let data = document.cookie;
+	let splits = data.split(",");
+	for(var i = 0; i < splits.length; i++) 
+	{
+		let thisOne = splits[i].trim();
+		let tokens = thisOne.split("=");
+		if( tokens[0] == "firstName" )
+		{
+			firstName = tokens[1];
+		}
+		else if( tokens[0] == "lastName" )
+		{
+			lastName = tokens[1];
+		}
+		else if( tokens[0] == "userId" )
+		{
+			userId = parseInt( tokens[1].trim() );
+		}
+	}
+	
+	if( userId < 0 )
+	{
+		window.location.href = "index.html";
+	}
+	else
+	{
+		document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
+	}
 }
 
 function doRegister()
@@ -136,18 +179,15 @@ function doRegister()
     return;
 }
 
-function logOut()
+function doLogout()
 {
-    //delete cookies (todo)
-
-    //redirect to login page
-    window.location.href = "index.html";
+	userId = 0;
+	firstName = "";
+	lastName = "";
+	document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+	window.location.href = "index.html";
 }
 
-function tempLogIn()
-{
-    window.location.href = "contacts.html";
-}
 
 function search()
 {
