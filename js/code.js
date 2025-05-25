@@ -1,4 +1,4 @@
-const urlBase = 'http://POOSDcop4331.com/LAMPAPI';
+const urlBase = 'http://poosdcop4331.xyz/LAMPAPI';
 const extension = 'php';
 
 let userID = 0;
@@ -48,7 +48,7 @@ function doLogin()
 //	var tmp = {login:login,password:hash};
 	let jsonPayload = JSON.stringify( tmp );
 	
-	let url = urlBase + '/Login.' + extension;
+	let url = urlBase + '/Login2.' + extension;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -57,7 +57,7 @@ function doLogin()
 	{
 		xhr.onreadystatechange = function() 
 		{
-			if (this.readyState == 4 && this.status == 200) 
+			if (this.readyState == 4 && this.state == 200); 
 			{
 				let jsonObject = JSON.parse( xhr.responseText );
 				userId = jsonObject.id;
@@ -71,7 +71,7 @@ function doLogin()
 				firstName = jsonObject.firstName;
 				lastName = jsonObject.lastName;
 
-				saveCookie();
+				//saveCookie();
 	
 				window.location.href = "contacts.html";
 			}
@@ -83,47 +83,6 @@ function doLogin()
 		document.getElementById("loginResult").innerHTML = err.message;
 	}
 
-}
-
-function saveCookie()
-{
-	let minutes = 20;
-	let date = new Date();
-	date.setTime(date.getTime()+(minutes*60*1000));	
-	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ";expires=" + date.toGMTString();
-}
-
-function readCookie()
-{
-	userId = -1;
-	let data = document.cookie;
-	let splits = data.split(",");
-	for(var i = 0; i < splits.length; i++) 
-	{
-		let thisOne = splits[i].trim();
-		let tokens = thisOne.split("=");
-		if( tokens[0] == "firstName" )
-		{
-			firstName = tokens[1];
-		}
-		else if( tokens[0] == "lastName" )
-		{
-			lastName = tokens[1];
-		}
-		else if( tokens[0] == "userId" )
-		{
-			userId = parseInt( tokens[1].trim() );
-		}
-	}
-	
-	if( userId < 0 )
-	{
-		window.location.href = "index.html";
-	}
-	else
-	{
-		document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
-	}
 }
 
 function doRegister()
