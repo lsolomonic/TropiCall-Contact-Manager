@@ -26,7 +26,7 @@ function registerSwap(){
 
 function log_wrapper()
 {
-    var status = document.getElementById("inner-title");
+    var status = document.getElementById("inner-title").textContent;
     if (status == "Welcome!")
     {
         doLogin();
