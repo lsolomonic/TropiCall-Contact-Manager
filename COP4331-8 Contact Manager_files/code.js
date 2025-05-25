@@ -11,15 +11,11 @@ function registerSwap(){
     {
         document.getElementById("inner-title").textContent = "Register:";
         document.getElementById("loginButton").textContent = "Continue";
-        document.getElementById("regBoxes").style.display = 'block';
-        document.getElementById("reg").style.marginTop = '0%';
         document.getElementById("reg").textContent = "Return to login page.";
     } else
     {
         document.getElementById("inner-title").textContent = "Welcome!";
         document.getElementById("loginButton").textContent = "Log In";
-        document.getElementById("regBoxes").style.display = 'none';
-        document.getElementById("reg").style.marginTop = '50%';
         document.getElementById("reg").textContent = "Not registered yet? Click here.";
     }
 }

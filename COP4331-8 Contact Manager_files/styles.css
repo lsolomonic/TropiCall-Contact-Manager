@@ -48,7 +48,7 @@ body
 
 #regBoxes
 {
-    display: none;
+    visibility: hidden;
 }
 
 #nav
@@ -121,7 +121,7 @@ hr {
 
 #reg
 {
-    margin-top: 50%;
+    margin-top: 20%;
     font-size: 20px; 
     font-family: 'Ubuntu';
     color: #00f;
@@ -137,9 +137,8 @@ hr {
     border-radius: 25px;
     text-align: center;
     font-size: 40px;
-    margin-top: 2.5%;
+    margin-top: 7.5%;
 }
-
 
 #loginName:focus, #loginPassword:focus, #firstName:focus, #lastName:focus
 {
@@ -166,8 +165,7 @@ hr {
 
 #loginButton
 {
-    margin-top: auto;
-    margin-bottom: auto;
+    margin-top: 7.5%;
 }
 
 #contactTable

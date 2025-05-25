@@ -12,11 +12,17 @@
         <div id="loginDiv">
             <span id="inner-title">Welcome!</span> <br />
             <br/>
-            <input type="text" id="loginName" placeholder="username"> <br/>
+            <span id="regBoxes">
+                <input type="text" id="firstName" placeholder="First Name"> <br/>
+                <br/>
+                <input type="text" id="lastName" placeholder="Last Name"> <br/>
+                <br/>
+            </span>
+            <input type="text" id="loginName" placeholder="Username"> <br/>
             <br/>
-            <input type="password" id="loginPassword" placeholder="password"> <br />
+            <input type="password" id="loginPassword" placeholder="Password"> <br />
             <br/>
-            <button type="button" id="loginButton" class="buttons" onclick="doLogin()">Log In</button> <br/>
+            <button type="button" id="loginButton" class="buttons" onclick="log_wrapper()">Log In</button> <br/>
             <br/>
             <span id="loginResult"></span>
             <h2 id="reg" onclick="registerSwap()">Not registered yet? Click here.</h2>
