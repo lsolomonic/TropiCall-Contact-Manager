@@ -1,7 +1,7 @@
 const urlBase = 'http://poosdcop4331.xyz/LAMPAPI';
 const extension = 'php';
 
-let userID = 0;
+let userId = 0;
 let firstName = "";
 let lastName = "";
 
@@ -74,7 +74,6 @@ function doLogin()
 		
 				firstName = jsonObject.firstName;
 				lastName = jsonObject.lastName;
-
 				//saveCookie();
 	
 				window.location.href = "contacts.html";
@@ -91,19 +90,34 @@ function doLogin()
 
 function doRegister()
 {
-    userID = 0;
+    userId = 0;
     firstName = "";
     lastName = "";
 
     //get inputs for new username and PW
-    let username = document.getElementById("userName").value;
-    let password = document.getElementById("userPW").value;
+    let newFn = document.getElementById("firstName").value;
+    let newLn = document.getElementById("lastName").value;
+    let username = document.getElementById("loginName").value;
+    let password = document.getElementById("loginPassword").value;
+
+    if (validate_password(password) != 0)
+    {
+        document.getElementById("loginResult").innerHTML = "Password must have 8 or more characters and 1 special character.";
+        return;
+    }
+
+    if (validate_names(newFn, newLn, username) != 0)
+    {
+        document.getElementById("loginResult").innerHTML = "First Name, Last Name, and Username must not be empty.";
+        return;
+    }
+
     //var hash = md5(password);
     document.getElementById("loginResult").innerHTML = "";
 
-    let tmp = {username:username, password:password};
+    let tmp = {login:username, password:password, firstName:newFn, lastName:newLn};
     let jsonPayload = JSON.stringify(tmp);
-    let url = urlBase + '/Register.' + extension;
+    let url = urlBase + '/Signup.' + extension;
 
     let xhr = new XMLHttpRequest();
     xhr.open(method = "POST", url, async = true);
@@ -126,7 +140,7 @@ function doRegister()
                 // if async call finishes (user doesn't exist)
                 if (this.status == 200)
                 {
-                    let jsonObject = xhr.parse(xhr.responseText);
+                    let jsonObject = JSON.parse(xhr.responseText);
                     userId = jsonObject.id;
                     document.getElementById("loginResult").innerHTML = "User added!";
                     //save cookie (todo)
@@ -151,6 +165,58 @@ function doLogout()
 	window.location.href = "index.html";
 }
 
+function saveCookie()
+{
+	let minutes = 20;
+	let date = new Date();
+	date.setTime(date.getTime()+(minutes*60*1000));	
+	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ";expires=" + date.toGMTString();
+}
+
+function isSpecialCharacter(char) {
+    const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    return specialChars.test(char);
+  }
+
+function validate_password(password)
+{
+        
+    if (password.length < 8)
+        {
+            // error code 1; password too short
+            return 1;
+        }
+
+    var sChar = 0;
+    for (let i = 0; i < password.length; i++)
+    {
+        if (isSpecialCharacter(password[i]))
+        {
+            sChar++;
+        }
+    }
+
+    if (sChar == 0)
+    {
+        //password must contain special character
+        return 2;
+    }
+    
+    //password valid
+    return 0;
+}
+
+function validate_names(fName, lName, userName)
+{
+    if (fName.length == 0 || lName.length == 0 || userName.length == 0)
+    {
+        // names can't be empty
+        return 1;
+    }
+
+    // names are all good
+    return 0;
+}
 
 function search()
 {
