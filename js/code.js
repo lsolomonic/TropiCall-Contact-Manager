@@ -106,7 +106,7 @@ function doRegister()
         return;
     }
 
-    if (validate_names(newFn, newLn, username) != 0)
+    if (validate_names({newFn, newLn, username}) != 0)
     {
         document.getElementById("loginResult").innerHTML = "First Name, Last Name, and Username must not be empty.";
         return;
@@ -206,16 +206,77 @@ function validate_password(password)
     return 0;
 }
 
-function validate_names(fName, lName, userName)
+function validate_names(names)
 {
-    if (fName.length == 0 || lName.length == 0 || userName.length == 0)
+    for (let i = 0; i < names.length; i++)
     {
-        // names can't be empty
-        return 1;
+        if (names[i].length == 0)
+        {
+            // names can't be empty
+            return 1;
+        }
     }
 
-    // names are all good
+    // otherwise, names are fine
     return 0;
+}
+
+
+function addContact()
+{
+    userId = 0;
+	firstName = "";
+	lastName = "";
+
+    let contactFirstName = document.getElementById("contactFirstName").value;
+    let contactLastName = document.getElementById("contactLastName").value;
+    let phone = document.getElementById("phoneNumber").value;
+    let email = document.getElementById("email").value;
+
+    if (validate_names({contactFirstName, contactLastName}) != 0)
+    {
+        document.getElementById("loginResult").innerHTML = "First and last name can't be empty!";
+    }
+
+    document.getElementById("loginResult").innerHTML = "";
+
+    let tmp = {FirstName:contactFirstName, LastName:contactLastName, Phone:phone, Email:email};
+    let jsonPayload = JSON.stringify(tmp);
+    let url = urlBase + '/AddContact.' + extension;
+
+    let xml = new XMLHttpRequest()
+    xhr.open(method = "POST", url, async = true);
+
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    try
+    {
+        xhr.onreadystatechange = function()
+        {
+            // if we receive a response from API
+            if (this.readyState == 4)
+            {
+                // if user already exists
+                if (this.status == 409)
+                {
+                    document.getElementById("loginResult").innerHTML = "Contact already exists!";
+                }
+
+                // if async call finishes (contact doesn't exist)
+                if (this.status == 200)
+                {
+                    let jsonObject = JSON.parse(xhr.responseText);
+                    userId = jsonObject.id;
+                    document.getElementById("loginResult").innerHTML = "Contact added!";
+                    //save cookie (todo)
+                }
+            }
+        };
+        xhr.send(jsonPayload);  
+    } catch (err)
+    {
+        document.getElementById("loginResult").innerHTML = err.message;
+    }
 }
 
 function search()
