@@ -135,7 +135,7 @@ function doLogin()
 	{
 		xhr.onreadystatechange = function() 
 		{
-			if (this.readyState == 4 && this.state == 200); 
+			if (this.readyState == 4 && this.status == 200); 
 			{
 				let jsonObject = JSON.parse( xhr.responseText );
 				userId = jsonObject.id;
@@ -302,6 +302,13 @@ function validate_names(names)
 }
 
 
+function createActionButton(text, onClick) {
+    let btn = document.createElement("button");
+    btn.textContent = text;
+    btn.onclick = onClick;
+    return btn;
+}
+
 function addContact()
 {
     let contactFirstName = document.getElementById("contactFirstName").value;
@@ -407,4 +414,77 @@ function saveContact(contactId, firstName, lastName, phone, email) {
     } catch (err) {
         document.getElementById("loginResult").innerHTML = err.message;
     }
+}
+
+function editContact(contactId) {
+    let rows = document.getElementById("contactTableBody").rows;
+    for (let i = 0; i < rows.length; i++) {
+        let cells = rows[i].cells;
+        
+        // if this is what we want to edit
+        if (cells[4].getElementsByTagName("button")[0].onclick.toString().includes(contactId)) {
+            // Make cells editable
+            cells[0].innerHTML = '<input type="text" value="' + cells[0].textContent + '">';
+            cells[1].innerHTML = '<input type="text" value="' + cells[1].textContent + '">';
+            cells[2].innerHTML = '<input type="text" value="' + cells[2].textContent + '">';
+            cells[3].innerHTML = '<input type="text" value="' + cells[3].textContent + '">';
+            
+            // Change Edit button to Save button
+            let saveBtn = createActionButton("Save", function() {
+                saveContact(
+                    contactId,
+                    cells[0].getElementsByTagName("input")[0].value,
+                    cells[1].getElementsByTagName("input")[0].value,
+                    cells[2].getElementsByTagName("input")[0].value,
+                    cells[3].getElementsByTagName("input")[0].value
+                );
+            });
+            
+            // Change Delete button to Cancel button
+            let cancelBtn = createActionButton("Cancel", searchContacts);
+            
+            // Update action cell
+            cells[4].innerHTML = '';
+            cells[4].appendChild(saveBtn);
+            cells[4].appendChild(cancelBtn);
+            
+            break;
+        }
+    }
+}
+
+function deleteContact(contactId) {
+    // confirmation
+    document.getElementById("loginResult").innerHTML = 
+        'Are you sure you want to delete this contact? <button onclick="confirmDelete(' + contactId + ')">Yes</button> <button onclick="clearDeleteMessage()">No</button>';
+}
+
+function confirmDelete(contactId) {
+    let tmp = {ID: contactId};
+    let jsonPayload = JSON.stringify(tmp);
+    let url = urlBase + '/DeleteContact.' + extension;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    try {
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    document.getElementById("loginResult").innerHTML = "Contact deleted!";
+                    searchContacts(); // Refresh the list
+                } else {
+                    document.getElementById("loginResult").innerHTML = "Error deleting contact";
+                }
+            }
+        };
+        xhr.send(jsonPayload);
+    } catch (err) {
+        document.getElementById("loginResult").innerHTML = err.message;
+    }
+}
+
+function clearDeleteMessage() {
+    document.getElementById("loginResult").innerHTML = "";
 }
