@@ -12,34 +12,17 @@
         <div id="nav">
             <h1 id="menu">Menu</h1>
             <hr>
-            <h1 id="addCon" oneclick="showAddContact()" >Add Contact</h1>
             <h1 id="logOut" onclick="doLogout()">Log Out</h1>
         </div>
-
-        <div id="list">
-            <span id="sTex"> Search: </span>
-            <input type="text" id="search" placeholder="start typing..." oninput="searchContacts()">
-            <hr>
-            <table id="contactTable">
-                <thead>
-                  <tr>
-                     <th>First Name</th>
-                     <th>Last Name</th>
-                     <th>Phone Number</th>
-                     <th>E-Mail Address</th>
-                </tr>
-                </thead>
-                <div id="contactResult"></div>
-            </div>
+        
                    <!-- add contact form-->
-
             <div id="addContactForm"
                 <h2> Add New Contact</h2>
                 <input type="text" id="contactFirstName" placeholder="First Name">
                 <input type="text" id="contactLastName" placeholder="Last Name">
                 <input type="text" id="contactPhone" placeholder="Phone">
                 <input type="text" id="contactEmail" placeholder="Email">
-                <button oneclick="addContact()">Add</button>
+                <button oneclick="addContact()">Add Contact</button>
                 <div id="contactResult"></div>
             <div>
 
