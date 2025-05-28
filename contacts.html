@@ -12,28 +12,55 @@
         <div id="nav">
             <h1 id="menu">Menu</h1>
             <hr>
-            <h1 id="addCon">Add Contact</h1>
+            <h1 id="addCon" oneclick="showAddContact()" >Add Contact</h1>
             <h1 id="logOut" onclick="doLogout()">Log Out</h1>
         </div>
 
         <div id="list">
             <span id="sTex"> Search: </span>
-            <input type="text" id="search" placeholder="start typing...">
+            <input type="text" id="search" placeholder="start typing..." oninput="searchContacts()">
             <hr>
             <table id="contactTable">
-                <tr>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Phone Number</th>
-                  <th>E-Mail Address</th>
+                <thead>
+                  <tr>
+                     <th>First Name</th>
+                     <th>Last Name</th>
+                     <th>Phone Number</th>
+                     <th>E-Mail Address</th>
                 </tr>
-                <tr>
-                  <td>Test First Name</td>
-                  <td>Test Last Name</td>
-                  <td>Test Phone Num</td>
-                  <td>Test E-Mail</td>
-                </tr>
-              </table>
-        </div>
+                </thead>
+                <div id="contactResult"></div>
+            </div>
+                   <!-- add contact form-->
+
+            <div id="addContactForm"
+                <h2> Add New Contact</h2>
+                <input type="text" id="contactFirstName" placeholder="First Name">
+                <input type="text" id="contactLastName" placeholder="Last Name">
+                <input type="text" id="contactPhone" placeholder="Phone">
+                <input type="text" id="contactEmail" placeholder="Email">
+                <button oneclick="addContact()">Add</button>
+                <div id="contactResult"></div>
+            <div>
+
+            <div id="list">
+                <span id="sTex"> Search </span>
+                <input type="text" id="search" placeholder="start typing. . ." oninput="searchContacts()">
+
+                <hr>
+                <table id"contactTable">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contactTableBody">
+                        <!--contacts will load down here-->
+                    </tbody>
+                </table>
+            </div>
     </body>
 </html>
