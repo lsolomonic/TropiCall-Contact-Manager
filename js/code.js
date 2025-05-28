@@ -7,7 +7,7 @@ let lastName = "";
 
 //load on start
 window.onload = function() {
-    document.getElementById("userName").textContext = firstName + " " + lastName;
+    document.getElementById("userName").textContent = firstName + " " + lastName;
     searchContacts();
 };
 
@@ -375,15 +375,7 @@ function saveContactCookie(contactId, firstName, lastName, phone, email) {
 
 }; expires=${expiration.toUTCString()}; path=/`;
 
-function search()
-{
-    return;
-}
 
-function fill_table()
-{
-    return;
-}
 }
 
 //load contact data from cookie
