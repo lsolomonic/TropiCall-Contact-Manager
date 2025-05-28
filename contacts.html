@@ -12,50 +12,28 @@
         <div id="nav">
             <h1 id="menu">Menu</h1>
             <hr>
-            <h1 id="addCon"onclick="showAddContactForm()">Add Contact</h1>
+            <h1 id="addCon">Add Contact</h1>
             <h1 id="logOut" onclick="doLogout()">Log Out</h1>
         </div>
 
         <div id="list">
             <span id="sTex"> Search: </span>
-            <input type="text" id="search" placeholder="Search by name, email or phone..." oninput="searchContacts()">
+            <input type="text" id="search" placeholder="start typing...">
             <hr>
-            
-            <!-- Add Contact Form (hidden by default) -->
-            <div id="contactFormContainer" style="display:none; background-color: #D9D9D9; padding: 20px; border-radius: 25px; margin-bottom: 20px;">
-                <h2 id="formTitle">Add New Contact</h2>
-                <form id="contactForm" onsubmit="saveContact(); return false;">
-                    <input type="hidden" id="editContactId">
-                    
-                    <input type="text" id="contactFirstName" placeholder="First Name" required style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 15px;">
-                    <input type="text" id="contactLastName" placeholder="Last Name" required style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 15px;">
-                    <input type="tel" id="phoneNumber" placeholder="Phone" style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 15px;">
-                    <input type="email" id="email" placeholder="Email" required style="width: 100%; padding: 10px; margin: 5px 0; border-radius: 15px;">
-                    
-                    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px;">
-                        <button type="submit" class="buttons">Save</button>
-                        <button type="button" class="buttons" onclick="hideAddContactForm()">Cancel</button>
-                    </div>
-                </form>
-            </div>
-
             <table id="contactTable">
-                <thead>
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Phone Number</th>
-                        <th>E-Mail Address</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Contacts will be loaded here by JavaScript -->
-                    <tr>
-                        <td colspan="5">Loading contacts...</td>
-                    </tr>
-                </tbody>
-            </table>
+                <tr>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Phone Number</th>
+                  <th>E-Mail Address</th>
+                </tr>
+                <tr>
+                  <td>Test First Name</td>
+                  <td>Test Last Name</td>
+                  <td>Test Phone Num</td>
+                  <td>Test E-Mail</td>
+                </tr>
+              </table>
         </div>
     </body>
 </html>
