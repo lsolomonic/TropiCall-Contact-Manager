@@ -7,6 +7,24 @@ let lastName = "";
 
 //load on start
 window.onload = function() {
+// Check for existing login cookies
+let cookies = document.cookie.split(';');
+for (let cookie of cookies) {
+    cookie = cookie.trim();
+    if (cookie.startsWith("userId=")) {
+        userId = cookie.substring(7);
+    } else if (cookie.startsWith("firstName=")) {
+        firstName = cookie.substring(10);
+    } else if (cookie.startsWith("lastName=")) {
+        lastName = cookie.substring(9);
+    }
+}
+
+// If no user logged in, redirect to login page
+if (!userId) {
+    window.location.href = "index.html";
+    return;
+}
     document.getElementById("userName").textContent = firstName + " " + lastName;
     searchContacts();
 };
@@ -102,12 +120,10 @@ function doLogin()
 	
 	let login = document.getElementById("loginName").value;
 	let password = document.getElementById("loginPassword").value;
-//	var hash = md5( password );
 	
 	document.getElementById("loginResult").innerHTML = "";
 
 	let tmp = {login:login,password:password};
-//	var tmp = {login:login,password:hash};
 	let jsonPayload = JSON.stringify( tmp );
 	
 	let url = urlBase + '/Login2.' + extension;
@@ -132,7 +148,7 @@ function doLogin()
 		
 				firstName = jsonObject.firstName;
 				lastName = jsonObject.lastName;
-				//saveCookie();
+				saveCookie();
 	
 				window.location.href = "contacts.html";
 			}
@@ -170,7 +186,6 @@ function doRegister()
         return;
     }
 
-    //var hash = md5(password);
     document.getElementById("loginResult").innerHTML = "";
 
     let tmp = {login:username, password:password, firstName:newFn, lastName:newLn};
@@ -201,7 +216,7 @@ function doRegister()
                     let jsonObject = JSON.parse(xhr.responseText);
                     userId = jsonObject.id;
                     document.getElementById("loginResult").innerHTML = "User added!";
-                    //save cookie (todo)
+                    saveCookie();
                 }
             }
         };
@@ -216,10 +231,14 @@ function doRegister()
 
 function doLogout()
 {
+    // Clear all cookies
+    document.cookie = "userId=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+    document.cookie = "firstName=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+    document.cookie = "lastName=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+
 	userId = 0;
 	firstName = "";
 	lastName = "";
-	document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
 	window.location.href = "index.html";
 }
 
@@ -227,8 +246,11 @@ function saveCookie()
 {
 	let minutes = 20;
 	let date = new Date();
-	date.setTime(date.getTime()+(minutes*60*1000));	
-	document.cookie = "firstName=" + firstName + ",lastName=" + lastName + ",userId=" + userId + ";expires=" + date.toGMTString();
+	date.setTime(date.getTime()+(minutes * 60 * 1000));	
+
+	document.cookie = `userId=${userId}; expires=${date.toUTCString()}; path=/`;
+    document.cookie = `firstName=${firstName}; expires=${date.toUTCString()}; path=/`;
+    document.cookie = `lastName=${lastName}; expires=${date.toUTCString()}; path=/`;
 }
 
 function isSpecialCharacter(char) {
@@ -328,18 +350,10 @@ function addContact()
                 else if (this.status == 200)
                 {
                     let jsonObject = JSON.parse(xhr.responseText);
-                    userId = jsonObject.id;
                     document.getElementById("loginResult").innerHTML = "Contact added!";
-                    //save cookie 
-                    saveContactCookie(
-                        jsonObject.id,
-                        contactFirstName,
-                        contactLastName,
-                        phone,
-                        email
-                    );
+                
                     
-                    // Optional: Clear form after successful addition
+                    // Clear form
                     document.getElementById("contactFirstName").value = "";
                     document.getElementById("contactLastName").value = "";
                     document.getElementById("phoneNumber").value = "";
@@ -357,35 +371,40 @@ function addContact()
     }
 }
 
-//function to save contact data in a cookie
-function saveContactCookie(contactId, firstName, lastName, phone, email) {
-    // Set cookie to expire in 30 days
-    let expiration = new Date();
-    expiration.setDate(expiration.getDate() + 30);
-    
-    // Save contact data
-    document.cookie = `lastAddedContact=${JSON.stringify({
-        id: contactId,
-        firstName: firstName,
-        lastName: lastName,
-        phone: phone,
-        email: email
+function saveContact(contactId, firstName, lastName, phone, email) {
+    // Simple validation
+    if (!firstName || !lastName) {
+        document.getElementById("loginResult").innerHTML = "First and last name are required!";
+        return;
     }
-)
 
-}; expires=${expiration.toUTCString()}; path=/`;
+    let tmp = {
+        ID: contactId,
+        FirstName: firstName,
+        LastName: lastName,
+        Phone: phone,
+        Email: email,
+        UserID: userId
+    };
 
+    let jsonPayload = JSON.stringify(tmp);
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", urlBase + '/UpdateContact.' + extension, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
-}
-
-//load contact data from cookie
-function loadContactCookie() {
-    let cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-        let cookie = cookies[i].trim();
-        if (cookie.startsWith("lastAddedContact=")) {
-            return JSON.parse(cookie.substring(17));
-        }
+    try {
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4) {
+                if (this.status == 200) {
+                    document.getElementById("loginResult").innerHTML = "Contact updated!";
+                    searchContacts(); // Refresh the list
+                } else {
+                    document.getElementById("loginResult").innerHTML = "Error updating contact";
+                }
+            }
+        };
+        xhr.send(jsonPayload);
+    } catch (err) {
+        document.getElementById("loginResult").innerHTML = err.message;
     }
-    return null;
 }
