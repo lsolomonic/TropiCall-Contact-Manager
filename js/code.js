@@ -34,7 +34,7 @@ function searchContacts() {
     xhr.send(jsonPayload);
 }
 
-//update contact table dynamically
+//update contact table dynamically (load)
 function updateContactTable(contacts) {
     let tableBody = document.getElementById("contactTableBody");
     tableBody.innerHTML = "";
@@ -385,6 +385,7 @@ function fill_table()
     return;
 }
 }
+
 //load contact data from cookie
 function loadContactCookie() {
     let cookies = document.cookie.split(';');
