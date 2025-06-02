@@ -7,26 +7,20 @@ let lastName = "";
 
 //load on start
 window.onload = function() {
-// Check for existing login cookies
-let cookies = document.cookie.split(';');
-for (let cookie of cookies) {
-    cookie = cookie.trim();
-    if (cookie.startsWith("userId=")) {
-        userId = cookie.substring(7);
-    } else if (cookie.startsWith("firstName=")) {
-        firstName = cookie.substring(10);
-    } else if (cookie.startsWith("lastName=")) {
-        lastName = cookie.substring(9);
+    // Check for existing login cookies
+    let cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith("userId=")) {
+            userId = cookie.substring(7);
+        } else if (cookie.startsWith("firstName=")) {
+            firstName = cookie.substring(10);
+        } else if (cookie.startsWith("lastName=")) {
+            lastName = cookie.substring(9);
+        }
     }
-}
-
-// If no user logged in, redirect to login page
-if (!userId) {
-    window.location.href = "index.html";
-    return;
-}
-    document.getElementById("userName").textContent = firstName + " " + lastName;
     searchContacts();
+    document.getElementById("welcome").textContent = "Welcome, " + firstName + " " + lastName;
 };
 
 //search contacts
@@ -149,8 +143,9 @@ function doLogin()
 				firstName = jsonObject.firstName;
 				lastName = jsonObject.lastName;
 				saveCookie();
-	
+                
 				window.location.href = "contacts.html";
+                searchContacts();
 			}
 		};
 		xhr.send(jsonPayload);
@@ -180,7 +175,7 @@ function doRegister()
         return;
     }
 
-    if (validate_names({newFn, newLn, username}) != 0)
+    if (validate_names([newFn, newLn, username]) != 0)
     {
         document.getElementById("loginResult").innerHTML = "First Name, Last Name, and Username must not be empty.";
         return;
@@ -309,20 +304,32 @@ function createActionButton(text, onClick) {
     return btn;
 }
 
+function showContactForm()
+{
+    var form = document.getElementById("addContactForm");
+    if (form.style.display == 'block')
+    {
+        form.style.display = 'none';
+    } else 
+    {
+        form.style.display = 'block';
+    }
+}
+
 function addContact()
 {
     let contactFirstName = document.getElementById("contactFirstName").value;
     let contactLastName = document.getElementById("contactLastName").value;
-    let phone = document.getElementById("phoneNumber").value;
-    let email = document.getElementById("email").value;
+    let phone = document.getElementById("contactPhone").value;
+    let email = document.getElementById("contactEmail").value;
 
-    if (validate_names({contactFirstName, contactLastName}) != 0)
+    if (validate_names([contactFirstName, contactLastName]) != 0)
     {
-        document.getElementById("loginResult").innerHTML = "First and last name can't be empty!";
+        document.getElementById("contactResult").innerHTML = "First and last name can't be empty!";
         return;
     }
 
-    document.getElementById("loginResult").innerHTML = "";
+    document.getElementById("contactResult").innerHTML = "";
 
     let tmp = {
         FirstName:contactFirstName, 
@@ -350,21 +357,21 @@ function addContact()
                 // if user already exists
                 if (this.status == 409)
                 {
-                    document.getElementById("loginResult").innerHTML = "Contact already exists!";
+                    document.getElementById("contactResult").innerHTML = "Contact already exists!";
                 }
 
                 // if async call finishes (contact doesn't exist)
                 else if (this.status == 200)
                 {
                     let jsonObject = JSON.parse(xhr.responseText);
-                    document.getElementById("loginResult").innerHTML = "Contact added!";
+                    document.getElementById("contactResult").innerHTML = "Contact added!";
                 
                     
                     // Clear form
                     document.getElementById("contactFirstName").value = "";
                     document.getElementById("contactLastName").value = "";
-                    document.getElementById("phoneNumber").value = "";
-                    document.getElementById("email").value = "";
+                    document.getElementById("contactPhone").value = "";
+                    document.getElementById("contactEmail").value = "";
                     
                     // Refresh contact list
                     searchContacts();
@@ -374,14 +381,14 @@ function addContact()
         xhr.send(jsonPayload);  
     } catch (err)
     {
-        document.getElementById("loginResult").innerHTML = err.message;
+        document.getElementById("contactResult").innerHTML = err.message;
     }
 }
 
 function saveContact(contactId, firstName, lastName, phone, email) {
     // Simple validation
     if (!firstName || !lastName) {
-        document.getElementById("loginResult").innerHTML = "First and last name are required!";
+        document.getElementById("contactResult").innerHTML = "First and last name are required!";
         return;
     }
 
