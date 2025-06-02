@@ -299,7 +299,17 @@ function validate_names(names)
 
 function createActionButton(text, onClick) {
     let btn = document.createElement("button");
-    btn.textContent = text;
+    btn.classList.add("actionButton");
+    if (text == "Delete")
+    {
+        btn.innerHTML = '<img src="css/img/delete.png" alt="Delete Contact" style="width: 30px; height: 30px;"/>'
+        btn.style.marginLeft = "1px";
+        btn.setAttribute("alt", "Button to delete this contact.");
+    } else
+    {
+        btn.innerHTML = '<img src="css/img/edit.png" alt="Edit Contact" style="width: 30px; height: 30px;"/>'
+        btn.setAttribute("alt", "Button to edit this contact.");
+    }
     btn.onclick = onClick;
     return btn;
 }
@@ -462,8 +472,11 @@ function editContact(contactId) {
 
 function deleteContact(contactId) {
     // confirmation
-    document.getElementById("loginResult").innerHTML = 
-        'Are you sure you want to delete this contact? <button onclick="confirmDelete(' + contactId + ')">Yes</button> <button onclick="clearDeleteMessage()">No</button>';
+    if (confirm("Are you sure you want to delete this contact?"))
+    {
+        confirmDelete(contactId);
+    }
+
 }
 
 function confirmDelete(contactId) {
