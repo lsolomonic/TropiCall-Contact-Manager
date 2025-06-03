@@ -176,6 +176,11 @@ hr {
     display: none;
 }
 
+#addCon:hover
+{
+    text-decoration: underline;
+}
+
 .contforms
 {
     width: 75%;

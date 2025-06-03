@@ -20,7 +20,7 @@ window.onload = function() {
         }
     }
     searchContacts();
-    document.getElementById("welcome").textContent = "Welcome, " + firstName + " " + lastName;
+    document.getElementById("welcome").textContent = "Welcome, " + firstName + " " + lastName + "!";
 };
 
 //search contacts
@@ -72,7 +72,7 @@ function updateContactTable(contacts) {
         // Add action buttons
         let actionCell = row.insertCell(4);
         actionCell.appendChild(createActionButton("Edit", () => editContact(contact.ID)));
-        actionCell.appendChild(createActionButton("Delete", () => deleteContact(contact.ID)));
+        actionCell.appendChild(createActionButton("Delete", () => deleteContact(contact.UserID, contact.FirstName, contact.LastName)));
     }
 }
 
@@ -470,19 +470,19 @@ function editContact(contactId) {
     }
 }
 
-function deleteContact(contactId) {
+function deleteContact(userId, firstName, lastName) {
     // confirmation
-    if (confirm("Are you sure you want to delete this contact?"))
+    if (confirm("Are you sure you want to delete the contact for " + firstName + " " + lastName + "?"))
     {
-        confirmDelete(contactId);
+        confirmDelete(userId, firstName, lastName);
     }
 
 }
 
-function confirmDelete(contactId) {
-    let tmp = {ID: contactId};
+function confirmDelete(userId, firstName, lastName) {
+    let tmp = {userId: userId, firstName: firstName, lastName: lastName};
     let jsonPayload = JSON.stringify(tmp);
-    let url = urlBase + '/DeleteContact.' + extension;
+    let url = urlBase + '/Delete.' + extension;
 
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
@@ -492,10 +492,10 @@ function confirmDelete(contactId) {
         xhr.onreadystatechange = function() {
             if (this.readyState == 4) {
                 if (this.status == 200) {
-                    document.getElementById("loginResult").innerHTML = "Contact deleted!";
+                    //document.getElementById("loginResult").innerHTML = "Contact deleted!";
                     searchContacts(); // Refresh the list
                 } else {
-                    document.getElementById("loginResult").innerHTML = "Error deleting contact";
+                    //document.getElementById("loginResult").innerHTML = "Error deleting contact";
                 }
             }
         };
