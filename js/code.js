@@ -71,7 +71,7 @@ function updateContactTable(contacts) {
         
         // Add action buttons
         let actionCell = row.insertCell(4);
-        actionCell.appendChild(createActionButton("Edit", () => editContact2(contact.ID, contact.FirstName, contact.LastName, contact.Phone, contact.Email)));
+        actionCell.appendChild(createActionButton("Edit", () => editContact(contact.ID, contact.FirstName, contact.LastName, contact.Phone, contact.Email, contact.UserID)));
         actionCell.appendChild(createActionButton("Delete", () => deleteContact(contact.UserID, contact.FirstName, contact.LastName)));
     }
 }
@@ -305,9 +305,6 @@ function createActionButton(text, onClick) {
         btn.innerHTML = '<img src="css/img/delete.png" alt="Delete Contact" style="width: 30px; height: 30px;"/>'
         btn.style.marginLeft = "1px";
         btn.setAttribute("alt", "Button to delete this contact.");
-    } else if(text == "Cancel") 
-    {
-        btn.innerHTML = '<img src="css/img/delete.png" alt="Cancel Edit" style="width: 30px; height: 30px;"/>'
     } else
     {
         btn.innerHTML = '<img src="css/img/edit.png" alt="Edit Contact" style="width: 30px; height: 30px;"/>'
@@ -398,7 +395,7 @@ function addContact()
     }
 }
 
-function saveContact(contactId, firstName, lastName, phone, email) {
+function saveContact(contactId, firstName, lastName, phone, email, userId) {
     // Simple validation
     if (!firstName || !lastName) {
         document.getElementById("contactResult").innerHTML = "First and last name are required!";
@@ -416,14 +413,13 @@ function saveContact(contactId, firstName, lastName, phone, email) {
 
     let jsonPayload = JSON.stringify(tmp);
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", urlBase + '/UpdateContact.' + extension, true);
+    xhr.open("POST", urlBase + '/Update.' + extension, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try {
         xhr.onreadystatechange = function() {
             if (this.readyState == 4) {
                 if (this.status == 200) {
-                    document.getElementById("loginResult").innerHTML = "Contact updated!";
                     searchContacts(); // Refresh the list
                 } else {
                     document.getElementById("loginResult").innerHTML = "Error updating contact";
@@ -436,7 +432,7 @@ function saveContact(contactId, firstName, lastName, phone, email) {
     }
 }
 
-function editContact(contactId, firstName, lastName, phone, email)
+function editContact(contactId, firstName, lastName, phone, email, userId)
 {
     let r = document.getElementById("contactTable").tBodies[0].rows;
     for (let i = 0; i < r.length; i++)
@@ -455,7 +451,7 @@ function editContact(contactId, firstName, lastName, phone, email)
             let cancelBtn = document.getElementById("cancelBtn");
             let saveBtn = document.getElementById("saveBtn")
             cancelBtn.onclick = () => searchContacts();
-            saveBtn.onclick = () => saveContact(contactId, firstName, lastName, phone, email);
+            saveBtn.onclick = () => saveContact(contactId, firstName, lastName, phone, email, userId);
         }
     }
 }
