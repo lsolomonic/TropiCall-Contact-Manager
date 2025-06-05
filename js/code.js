@@ -71,7 +71,7 @@ function updateContactTable(contacts) {
         
         // Add action buttons
         let actionCell = row.insertCell(4);
-        actionCell.appendChild(createActionButton("Edit", () => editContact(contact.ID)));
+        actionCell.appendChild(createActionButton("Edit", () => editContact2(contact.ID, contact.FirstName, contact.LastName, contact.Phone, contact.Email)));
         actionCell.appendChild(createActionButton("Delete", () => deleteContact(contact.UserID, contact.FirstName, contact.LastName)));
     }
 }
@@ -305,6 +305,9 @@ function createActionButton(text, onClick) {
         btn.innerHTML = '<img src="css/img/delete.png" alt="Delete Contact" style="width: 30px; height: 30px;"/>'
         btn.style.marginLeft = "1px";
         btn.setAttribute("alt", "Button to delete this contact.");
+    } else if(text == "Cancel") 
+    {
+        btn.innerHTML = '<img src="css/img/delete.png" alt="Cancel Edit" style="width: 30px; height: 30px;"/>'
     } else
     {
         btn.innerHTML = '<img src="css/img/edit.png" alt="Edit Contact" style="width: 30px; height: 30px;"/>'
@@ -433,39 +436,26 @@ function saveContact(contactId, firstName, lastName, phone, email) {
     }
 }
 
-function editContact(contactId) {
-    let rows = document.getElementById("contactTableBody").rows;
-    for (let i = 0; i < rows.length; i++) {
-        let cells = rows[i].cells;
-        
-        // if this is what we want to edit
-        if (cells[4].getElementsByTagName("button")[0].onclick.toString().includes(contactId)) {
-            // Make cells editable
-            cells[0].innerHTML = '<input type="text" value="' + cells[0].textContent + '">';
-            cells[1].innerHTML = '<input type="text" value="' + cells[1].textContent + '">';
-            cells[2].innerHTML = '<input type="text" value="' + cells[2].textContent + '">';
-            cells[3].innerHTML = '<input type="text" value="' + cells[3].textContent + '">';
-            
-            // Change Edit button to Save button
-            let saveBtn = createActionButton("Save", function() {
-                saveContact(
-                    contactId,
-                    cells[0].getElementsByTagName("input")[0].value,
-                    cells[1].getElementsByTagName("input")[0].value,
-                    cells[2].getElementsByTagName("input")[0].value,
-                    cells[3].getElementsByTagName("input")[0].value
-                );
-            });
-            
-            // Change Delete button to Cancel button
-            let cancelBtn = createActionButton("Cancel", searchContacts);
-            
+function editContact(contactId, firstName, lastName, phone, email)
+{
+    let r = document.getElementById("contactTable").tBodies[0].rows;
+    for (let i = 0; i < r.length; i++)
+    {
+        let cells = r[i].cells;
+        if (cells[0].innerHTML == firstName && cells[1].innerHTML == lastName && 
+            cells[2].innerHTML == phone && cells[3].innerHTML == email)
+        {
+            cells[0].innerHTML = '<input type="text" class="editField" value="' + cells[0].textContent + '">';
+            cells[1].innerHTML = '<input type="text" class="editField" value="' + cells[1].textContent + '">';
+            cells[2].innerHTML = '<input type="text" class="editField" value="' + cells[2].textContent + '">';
+            cells[3].innerHTML = '<input type="text" class="editField" value="' + cells[3].textContent + '">';
+
             // Update action cell
-            cells[4].innerHTML = '';
-            cells[4].appendChild(saveBtn);
-            cells[4].appendChild(cancelBtn);
-            
-            break;
+            cells[4].innerHTML = '<button id="saveBtn" class="actionButton"><img src="css/img/confirm.png" alt="Confirm Changes" style="width: 30px; height: 30px;"></button> <button id="cancelBtn" class="actionButton"><img src="css/img/delete.png" alt="Delete Contact" style="width: 30px; height: 30px;"/></button>';
+            let cancelBtn = document.getElementById("cancelBtn");
+            let saveBtn = document.getElementById("saveBtn")
+            cancelBtn.onclick = () => searchContacts();
+            saveBtn.onclick = () => saveContact(contactId, firstName, lastName, phone, email);
         }
     }
 }
