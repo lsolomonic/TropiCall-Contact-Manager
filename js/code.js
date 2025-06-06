@@ -108,52 +108,52 @@ function log_wrapper()
 
 function doLogin()
 {
-	userId = 0;
-	firstName = "";
-	lastName = "";
-	
-	let login = document.getElementById("loginName").value;
-	let password = document.getElementById("loginPassword").value;
-	
-	document.getElementById("loginResult").innerHTML = "";
+    userId = 0;
+    firstName = "";
+    lastName = "";
+    
+    let login = document.getElementById("loginName").value;
+    let password = document.getElementById("loginPassword").value;
+    
+    document.getElementById("loginResult").innerHTML = "";
 
-	let tmp = {login:login,password:password};
-	let jsonPayload = JSON.stringify( tmp );
-	
-	let url = urlBase + '/Login2.' + extension;
+    let tmp = {login:login,password:password};
+    let jsonPayload = JSON.stringify( tmp );
+    
+    let url = urlBase + '/Login2.' + extension;
 
-	let xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try
-	{
-		xhr.onreadystatechange = function() 
-		{
-			if (this.readyState == 4 && this.status == 200); 
-			{
-				let jsonObject = JSON.parse( xhr.responseText );
-				userId = jsonObject.id;
-		
-				if( userId < 1 )
-				{		
-					document.getElementById("loginResult").innerHTML = "User/Password combination incorrect";
-					return;
-				}
-		
-				firstName = jsonObject.firstName;
-				lastName = jsonObject.lastName;
-				saveCookie();
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    try
+    {
+        xhr.onreadystatechange = function() 
+        {
+            if (this.readyState == 4 && this.status == 200); 
+            {
+                let jsonObject = JSON.parse( xhr.responseText );
+                userId = jsonObject.id;
+        
+                if( userId < 1 )
+                {       
+                    document.getElementById("loginResult").innerHTML = "User/Password combination incorrect";
+                    return;
+                }
+        
+                firstName = jsonObject.firstName;
+                lastName = jsonObject.lastName;
+                saveCookie();
                 
-				window.location.href = "contacts.html";
+                window.location.href = "contacts.html";
                 searchContacts();
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)
-	{
-		document.getElementById("loginResult").innerHTML = err.message;
-	}
+            }
+        };
+        xhr.send(jsonPayload);
+    }
+    catch(err)
+    {
+        document.getElementById("loginResult").innerHTML = err.message;
+    }
 
 }
 
@@ -231,19 +231,19 @@ function doLogout()
     document.cookie = "firstName=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
     document.cookie = "lastName=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
 
-	userId = 0;
-	firstName = "";
-	lastName = "";
-	window.location.href = "index.html";
+    userId = 0;
+    firstName = "";
+    lastName = "";
+    window.location.href = "index.html";
 }
 
 function saveCookie()
 {
-	let minutes = 20;
-	let date = new Date();
-	date.setTime(date.getTime()+(minutes * 60 * 1000));	
+    let minutes = 20;
+    let date = new Date();
+    date.setTime(date.getTime()+(minutes * 60 * 1000)); 
 
-	document.cookie = `userId=${userId}; expires=${date.toUTCString()}; path=/`;
+    document.cookie = `userId=${userId}; expires=${date.toUTCString()}; path=/`;
     document.cookie = `firstName=${firstName}; expires=${date.toUTCString()}; path=/`;
     document.cookie = `lastName=${lastName}; expires=${date.toUTCString()}; path=/`;
 }
@@ -396,62 +396,94 @@ function addContact()
 }
 
 function saveContact(contactId, firstName, lastName, phone, email, userId) {
-    // Simple validation
+    // Validate updated input
     if (!firstName || !lastName) {
         document.getElementById("contactResult").innerHTML = "First and last name are required!";
         return;
     }
 
-    let tmp = {
-        ID: contactId,
-        FirstName: firstName,
-        LastName: lastName,
+    const tmp = {
+        id: contactId,
+        "First Name": firstName,
+        "Last Name": lastName,
         Phone: phone,
-        Email: email,
-        UserID: userId
+        Email: email
     };
 
-    let jsonPayload = JSON.stringify(tmp);
-    let xhr = new XMLHttpRequest();
+    const jsonPayload = JSON.stringify(tmp);
+    const xhr = new XMLHttpRequest();
     xhr.open("POST", urlBase + '/Update.' + extension, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
     try {
-        xhr.onreadystatechange = function() {
-            if (this.readyState == 4) {
-                if (this.status == 200) {
-                    searchContacts(); // Refresh the list
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    if (response.error === "") {
+                        searchContacts(); // Refresh contact list
+                    } else {
+                        document.getElementById("contactResult").innerHTML = "Update failed: " + response.error;
+                    }
                 } else {
-                    document.getElementById("loginResult").innerHTML = "Error updating contact";
+                    document.getElementById("contactResult").innerHTML = "Server error while saving.";
                 }
             }
         };
         xhr.send(jsonPayload);
     } catch (err) {
-        document.getElementById("loginResult").innerHTML = err.message;
+        document.getElementById("contactResult").innerHTML = "Exception: " + err.message;
     }
 }
 
-function editContact(contactId, firstName, lastName, phone, email, userId)
-{
-    let r = document.getElementById("contactTable").tBodies[0].rows;
-    for (let i = 0; i < r.length; i++)
-    {
-        let cells = r[i].cells;
-        if (cells[0].innerHTML == firstName && cells[1].innerHTML == lastName && 
-            cells[2].innerHTML == phone && cells[3].innerHTML == email)
-        {
-            cells[0].innerHTML = '<input type="text" class="editField" value="' + cells[0].textContent + '">';
-            cells[1].innerHTML = '<input type="text" class="editField" value="' + cells[1].textContent + '">';
-            cells[2].innerHTML = '<input type="text" class="editField" value="' + cells[2].textContent + '">';
-            cells[3].innerHTML = '<input type="text" class="editField" value="' + cells[3].textContent + '">';
 
-            // Update action cell
-            cells[4].innerHTML = '<button id="saveBtn" class="actionButton"><img src="css/img/confirm.png" alt="Confirm Changes" style="width: 30px; height: 30px;"></button> <button id="cancelBtn" class="actionButton"><img src="css/img/delete.png" alt="Delete Contact" style="width: 30px; height: 30px;"/></button>';
-            let cancelBtn = document.getElementById("cancelBtn");
-            let saveBtn = document.getElementById("saveBtn")
+function editContact(contactId, firstName, lastName, phone, email, userId) {
+    let rows = document.getElementById("contactTable").tBodies[0].rows;
+
+    for (let i = 0; i < rows.length; i++) {
+        let cells = rows[i].cells;
+
+        // Safer way: match by contact ID stored in a data attribute (optional future upgrade)
+        if (
+            cells[0].innerText.trim() === firstName &&
+            cells[1].innerText.trim() === lastName &&
+            cells[2].innerText.trim() === phone &&
+            cells[3].innerText.trim() === email
+        ) {
+            // Replace cells with editable inputs
+            cells[0].innerHTML = `<input type="text" class="editField" value="${firstName}">`;
+            cells[1].innerHTML = `<input type="text" class="editField" value="${lastName}">`;
+            cells[2].innerHTML = `<input type="text" class="editField" value="${phone}">`;
+            cells[3].innerHTML = `<input type="text" class="editField" value="${email}">`;
+
+            // Add Save and Cancel buttons (no duplicate IDs)
+            const saveBtn = document.createElement("button");
+            saveBtn.className = "actionButton";
+            saveBtn.innerHTML = '<img src="css/img/confirm.png" alt="Confirm Changes" style="width: 30px; height: 30px;">';
+
+            const cancelBtn = document.createElement("button");
+            cancelBtn.className = "actionButton";
+            cancelBtn.innerHTML = '<img src="css/img/delete.png" alt="Cancel Edit" style="width: 30px; height: 30px;">';
+
+            // Assign event handlers
             cancelBtn.onclick = () => searchContacts();
-            saveBtn.onclick = () => saveContact(contactId, firstName, lastName, phone, email, userId);
+
+            saveBtn.onclick = () => {
+                const inputs = rows[i].querySelectorAll("input.editField");
+                const updatedFirst = inputs[0].value.trim();
+                const updatedLast = inputs[1].value.trim();
+                const updatedPhone = inputs[2].value.trim();
+                const updatedEmail = inputs[3].value.trim();
+
+                saveContact(contactId, updatedFirst, updatedLast, updatedPhone, updatedEmail, userId);
+            };
+
+            // Replace the button cell with new buttons
+            cells[4].innerHTML = "";
+            cells[4].appendChild(saveBtn);
+            cells[4].appendChild(cancelBtn);
+
+            break;
         }
     }
 }
