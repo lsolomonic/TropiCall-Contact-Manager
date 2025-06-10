@@ -92,6 +92,8 @@ function registerSwap(){
         document.getElementById("reg").style.marginTop = '50%';
         document.getElementById("reg").textContent = "Not registered yet? Click here.";
     }
+
+    document.getElementById("loginResult").innerHTML = "";
 }
 
 function log_wrapper()
@@ -333,14 +335,15 @@ function addContact()
     let phone = document.getElementById("contactPhone").value;
     let email = document.getElementById("contactEmail").value;
 
-    if (validate_names([contactFirstName, contactLastName]) != 0)
+    let form = document.getElementById("addContactForm");
+
+    if (!form.checkValidity())
     {
-        document.getElementById("contactResult").innerHTML = "First and last name can't be empty!";
+        document.getElementById("contactResult").innerHTML = "Invalid inputs.";
         return;
     }
 
     document.getElementById("contactResult").innerHTML = "";
-
     let tmp = {
         FirstName:contactFirstName, 
         LastName:contactLastName, 
@@ -376,7 +379,6 @@ function addContact()
                     let jsonObject = JSON.parse(xhr.responseText);
                     document.getElementById("contactResult").innerHTML = "Contact added!";
                 
-                    
                     // Clear form
                     document.getElementById("contactFirstName").value = "";
                     document.getElementById("contactLastName").value = "";

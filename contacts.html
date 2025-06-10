@@ -1,6 +1,6 @@
 <html lang="en">
     <head>
-        <title> COP4331-8 Contact Manager</title>
+        <title> TropiCall Contact Manager</title>
         <link href="css/styles.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
         <script type="text/javascript" src="js/code.js"></script>
@@ -8,19 +8,19 @@
 
     <body>
         <h1 id="welcome">Welcome, firstName lastName!</h1>
-        <h1 id="about">About Us</h1>
+        <h1 id="about" >About Us</h1>
         <div id="nav">
           <h1 id="menu">Menu</h1>
           <hr>
           <h1 id="addCon" onclick="showContactForm()">Add Contact</h1>
-          <div id="addContactForm">
-            <input type="text" class="contforms" id="contactFirstName" placeholder="First Name"> <br/>
-            <input type="text" class="contforms" id="contactLastName" placeholder="Last Name"> <br/>
-            <input type="text" class="contforms" id="contactPhone" placeholder="Phone"> <br/>
-            <input type="text" class="contforms" id="contactEmail" placeholder="Email"> <br/>
+          <form id="addContactForm">
+            <input type="text" class="contforms" id="contactFirstName" placeholder="First Name" required> <br/>
+            <input type="text" class="contforms" id="contactLastName" placeholder="Last Name" required> <br/>
+            <input type="text" class="contforms" id="contactPhone" placeholder="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required> <br/>
+            <input type="text" class="contforms" id="contactEmail" placeholder="Email" pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" required> <br/>
             <button id="addButton" onclick="addContact()">Add Contact</button>
             <div id="contactResult"></div>
-          </div>
+          </form>
           <hr>
           <h1 id="logOut" onclick="doLogout()">Log Out</h1>
           <hr>
