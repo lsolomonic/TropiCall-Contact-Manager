@@ -25,6 +25,7 @@ window.onload = function() {
 
 //search contacts
 function searchContacts() {
+    // get value of search term and load it to json payload
     let searchTerm = document.getElementById("search").value;
     let tmp = {userId: userId, search: searchTerm};
     let jsonPayload = JSON.stringify(tmp);
@@ -33,6 +34,7 @@ function searchContacts() {
     xhr.open("POST", urlBase + '/Search.' + extension, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
     
+    // send search term to API
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             let response = JSON.parse(xhr.responseText);
@@ -51,6 +53,7 @@ function updateContactTable(contacts) {
     let tableBody = document.getElementById("contactTableBody");
     tableBody.innerHTML = "";
 
+    // if we don't get any contacts back from our search
     if (!contacts || contacts.length === 0) {
         let row = tableBody.insertRow();
         let cell = row.insertCell(0);
@@ -59,6 +62,7 @@ function updateContactTable(contacts) {
         return;
     }
 
+    // if we do get contacts back, make table rows for them 
     for (let i = 0; i < contacts.length; i++) {
         let contact = contacts[i];
         let row = tableBody.insertRow();
@@ -76,7 +80,9 @@ function updateContactTable(contacts) {
     }
 }
 
+// function to swap between register and login dynamically
 function registerSwap(){
+    // if we are on login, swap to register
     if (document.getElementById("inner-title").textContent == "Welcome!")
     {
         document.getElementById("inner-title").textContent = "Register:";
@@ -84,7 +90,7 @@ function registerSwap(){
         document.getElementById("regBoxes").style.display = 'block';
         document.getElementById("reg").style.marginTop = '0%';
         document.getElementById("reg").textContent = "Return to login page.";
-    } else
+    } else //if we are on register, swap to login
     {
         document.getElementById("inner-title").textContent = "Welcome!";
         document.getElementById("loginButton").textContent = "Log In";
@@ -96,6 +102,7 @@ function registerSwap(){
     document.getElementById("loginResult").innerHTML = "";
 }
 
+// wrapper to make sure we register/login according to page user is on
 function log_wrapper()
 {
     var status = document.getElementById("inner-title").textContent;
@@ -108,12 +115,14 @@ function log_wrapper()
     }
 }
 
+// method to verify login with database
 function doLogin()
 {
     userId = 0;
     firstName = "";
     lastName = "";
     
+    // get values entered for username and password, load them to JSON payload
     let login = document.getElementById("loginName").value;
     let password = document.getElementById("loginPassword").value;
     
@@ -127,6 +136,8 @@ function doLogin()
     let xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    
+    // send JSON payload to API
     try
     {
         xhr.onreadystatechange = function() 
@@ -135,13 +146,15 @@ function doLogin()
             {
                 let jsonObject = JSON.parse( xhr.responseText );
                 userId = jsonObject.id;
-        
+                
+                //if userID < 1 then they didn't enter a valid login
                 if( userId < 1 )
                 {       
                     document.getElementById("loginResult").innerHTML = "User/Password combination incorrect";
                     return;
                 }
-        
+                
+                // otherwise, save their first and last names for welcome and move to contacts.html
                 firstName = jsonObject.firstName;
                 lastName = jsonObject.lastName;
                 saveCookie();
@@ -159,6 +172,7 @@ function doLogin()
 
 }
 
+// function to register new user to database
 function doRegister()
 {
     userId = 0;
@@ -171,12 +185,14 @@ function doRegister()
     let username = document.getElementById("loginName").value;
     let password = document.getElementById("loginPassword").value;
 
+    // validate their password
     if (validate_password(password) != 0)
     {
         document.getElementById("loginResult").innerHTML = "Password must have 8 or more characters and 1 special character.";
         return;
     }
 
+    // make sure their names aren't empty 
     if (validate_names([newFn, newLn, username]) != 0)
     {
         document.getElementById("loginResult").innerHTML = "First Name, Last Name, and Username must not be empty.";
@@ -185,6 +201,7 @@ function doRegister()
 
     document.getElementById("loginResult").innerHTML = "";
 
+    //make JSON payload to send to API
     let tmp = {login:username, password:password, firstName:newFn, lastName:newLn};
     let jsonPayload = JSON.stringify(tmp);
     let url = urlBase + '/Signup.' + extension;
@@ -194,6 +211,7 @@ function doRegister()
 
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
+    // send to API 
     try
     {
         xhr.onreadystatechange = function()
@@ -226,6 +244,7 @@ function doRegister()
     return;
 }
 
+// function to log user out
 function doLogout()
 {
     // Clear all cookies
@@ -236,9 +255,11 @@ function doLogout()
     userId = 0;
     firstName = "";
     lastName = "";
+    // send them back to login page
     window.location.href = "index.html";
 }
 
+// save cookie (from Dr. Leinecker's LAMP demo)
 function saveCookie()
 {
     let minutes = 20;
@@ -250,11 +271,13 @@ function saveCookie()
     document.cookie = `lastName=${lastName}; expires=${date.toUTCString()}; path=/`;
 }
 
+//regex to check if password contains special character
 function isSpecialCharacter(char) {
     const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     return specialChars.test(char);
-  }
+}
 
+//function that validates that password has 8 chars and 1 special character
 function validate_password(password)
 {
         
@@ -283,6 +306,7 @@ function validate_password(password)
     return 0;
 }
 
+// simply makes sure names are not empty
 function validate_names(names)
 {
     for (let i = 0; i < names.length; i++)
@@ -298,24 +322,28 @@ function validate_names(names)
     return 0;
 }
 
-
+// function to create action buttons in table (edit, delete)
 function createActionButton(text, onClick) {
+    // create new button and give it a class 
     let btn = document.createElement("button");
     btn.classList.add("actionButton");
+    // assign delete image (X) and style it
     if (text == "Delete")
     {
         btn.innerHTML = '<img src="css/img/delete.png" alt="Delete Contact" style="width: 30px; height: 30px;"/>'
         btn.style.marginLeft = "1px";
         btn.setAttribute("alt", "Button to delete this contact.");
-    } else
+    } else // assign edit image (pencil) and style it
     {
         btn.innerHTML = '<img src="css/img/edit.png" alt="Edit Contact" style="width: 30px; height: 30px;"/>'
         btn.setAttribute("alt", "Button to edit this contact.");
     }
+    // give the button its onclick behavior and return it
     btn.onclick = onClick;
     return btn;
 }
 
+// function to show add contact form or hide it 
 function showContactForm()
 {
     var form = document.getElementById("addContactForm");
@@ -328,21 +356,26 @@ function showContactForm()
     }
 }
 
+// function to add contact to database  
 function addContact()
 {
+    // get info for new contact
     let contactFirstName = document.getElementById("contactFirstName").value;
     let contactLastName = document.getElementById("contactLastName").value;
     let phone = document.getElementById("contactPhone").value;
     let email = document.getElementById("contactEmail").value;
 
+    // get form by id
     let form = document.getElementById("addContactForm");
 
+    // if any field in form is invalid, tell user and return 
     if (!form.checkValidity())
     {
         document.getElementById("contactResult").innerHTML = "Invalid inputs.";
         return;
     }
 
+    // if not, make JSON payload 
     document.getElementById("contactResult").innerHTML = "";
     let tmp = {
         FirstName:contactFirstName, 
@@ -360,6 +393,7 @@ function addContact()
 
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
+    // send to API
     try
     {
         xhr.onreadystatechange = function()
@@ -397,6 +431,7 @@ function addContact()
     }
 }
 
+// function to save contact after it's edited
 function saveContact(contactId, firstName, lastName, phone, email, userId) {
     // Validate updated input
     if (!firstName || !lastName) {
@@ -404,6 +439,7 @@ function saveContact(contactId, firstName, lastName, phone, email, userId) {
         return;
     }
 
+    // make JSON payload
     const tmp = {
         id: contactId,
         "First Name": firstName,
@@ -417,6 +453,7 @@ function saveContact(contactId, firstName, lastName, phone, email, userId) {
     xhr.open("POST", urlBase + '/Update.' + extension, true);
     xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
+    // send JSON to API
     try {
         xhr.onreadystatechange = function () {
             if (this.readyState === 4) {
@@ -438,7 +475,7 @@ function saveContact(contactId, firstName, lastName, phone, email, userId) {
     }
 }
 
-
+// function that handles editing contacts inline
 function editContact(contactId, firstName, lastName, phone, email, userId) {
     let rows = document.getElementById("contactTable").tBodies[0].rows;
 
@@ -490,6 +527,7 @@ function editContact(contactId, firstName, lastName, phone, email, userId) {
     }
 }
 
+// wrapper that confirms user wants to delete the contact 
 function deleteContact(userId, firstName, lastName) {
     // confirmation
     if (confirm("Are you sure you want to delete the contact for " + firstName + " " + lastName + "?"))
@@ -499,7 +537,10 @@ function deleteContact(userId, firstName, lastName) {
 
 }
 
+// function that handles actually deleting the contact
 function confirmDelete(userId, firstName, lastName) {
+
+    // make JSON payload
     let tmp = {userId: userId, firstName: firstName, lastName: lastName};
     let jsonPayload = JSON.stringify(tmp);
     let url = urlBase + '/Delete.' + extension;
@@ -525,10 +566,12 @@ function confirmDelete(userId, firstName, lastName) {
     }
 }
 
+// function to clear warning messages on login page
 function clearDeleteMessage() {
     document.getElementById("loginResult").innerHTML = "";
 }
 
+// window swapper for about us button 
 function about()
 {
     window.location.href="about.html"
