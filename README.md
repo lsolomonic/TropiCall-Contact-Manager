@@ -3,8 +3,8 @@
 ## Project Members: 
 
 Bill Noel (API)  
-Ethan Baedorf (Database) 
-Zachary Kertesz (Project Manager) 
+Ethan Baedorf (Database)  
+Zachary Kertesz (Project Manager)   
 Alissa Farrier (Front-End)   
 Lexi Solomonic (Front-End)  
 
