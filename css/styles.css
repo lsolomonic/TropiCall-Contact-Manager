@@ -28,6 +28,7 @@ body
     font-size: 45px;
     width: 100%;
     margin-left: auto;
+    padding:10px;
     font-family: 'Ubuntu';
     color: #D9D9D9;
 }
@@ -354,4 +355,9 @@ hr {
     text-align: center;
     border-radius: 25px;
     font-family: 'Ubuntu', sans-serif;
+}
+
+#about:hover
+{
+    text-decoration: underline;
 }

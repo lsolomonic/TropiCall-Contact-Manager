@@ -528,3 +528,8 @@ function confirmDelete(userId, firstName, lastName) {
 function clearDeleteMessage() {
     document.getElementById("loginResult").innerHTML = "";
 }
+
+function about()
+{
+    window.location.href="about.html"
+}
