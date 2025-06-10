@@ -10,4 +10,6 @@ Lexi Solomonic (Front-End)
 
 ## Functionality
 
-TropiCall Contact Manager allows all users to perform quick and intuitive operations to manage all of their contacts. Inline edit, add, and delete contact operations, along with a dynamically loaded table complete the basic CRUD (Create, Read, Update, Delete) requirements. 
+TropiCall Contact Manager allows all users to perform quick and intuitive operations to manage all of their contacts. Inline edit, add, and delete contact operations, along with a dynamically loaded table complete the basic CRUD (Create, Read, Update, Delete) requirements. Visit our project at:
+
+http://poosdcop4331.xyz/index.html
