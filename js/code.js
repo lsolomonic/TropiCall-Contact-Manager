@@ -404,15 +404,21 @@ function addContact()
                 // if user already exists
                 if (this.status == 409)
                 {
-                    document.getElementById("contactResult").innerHTML = "Contact already exists!";
+                    document.getElementById("tableResult").innerHTML = "Contact already exists!";
+                    setTimeout(function(){
+                        document.getElementById("tableResult").innerHTML = "";
+                    }, 3000)
                 }
 
                 // if async call finishes (contact doesn't exist)
                 else if (this.status == 200)
                 {
                     let jsonObject = JSON.parse(xhr.responseText);
-                    document.getElementById("contactResult").innerHTML = "Contact added!";
-                
+                    document.getElementById("tableResult").innerHTML = "Contact added!";
+                    setTimeout(function(){
+                        document.getElementById("tableResult").innerHTML = "";
+                    }, 3000)
+
                     // Clear form
                     document.getElementById("contactFirstName").value = "";
                     document.getElementById("contactLastName").value = "";
@@ -427,6 +433,9 @@ function addContact()
         xhr.send(jsonPayload);  
     } catch (err)
     {
+        setTimeout(function(){
+            document.getElementById("tableResult").innerHTML = "";
+        }, 3000)
         document.getElementById("contactResult").innerHTML = err.message;
     }
 }
@@ -553,16 +562,25 @@ function confirmDelete(userId, firstName, lastName) {
         xhr.onreadystatechange = function() {
             if (this.readyState == 4) {
                 if (this.status == 200) {
-                    //document.getElementById("loginResult").innerHTML = "Contact deleted!";
+                    document.getElementById("tableResult").innerHTML = "Contact deleted!";
+                    setTimeout(function(){
+                        document.getElementById("tableResult").innerHTML = "";
+                    }, 3000);
                     searchContacts(); // Refresh the list
                 } else {
-                    //document.getElementById("loginResult").innerHTML = "Error deleting contact";
+                    document.getElementById("tableResult").innerHTML = "Error deleting contact";
+                    setTimeout(function(){
+                        document.getElementById("tableResult").innerHTML = "";
+                    }, 3000)
                 }
             }
         };
         xhr.send(jsonPayload);
     } catch (err) {
-        document.getElementById("loginResult").innerHTML = err.message;
+        document.getElementById("tableResult").innerHTML = err.message;
+        setTimeout(function(){
+            document.getElementById("tableResult").innerHTML = "";
+        }, 3000)
     }
 }
 
@@ -571,7 +589,7 @@ function clearDeleteMessage() {
     document.getElementById("loginResult").innerHTML = "";
 }
 
-// window swapper for about us button 
+// window swapper for about us button
 function about()
 {
     window.location.href="about.html"

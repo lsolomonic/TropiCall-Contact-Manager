@@ -13,7 +13,7 @@
           <h1 id="menu">Menu</h1>
           <hr>
           <h1 id="addCon" onclick="showContactForm()">Add Contact</h1>
-          <form id="addContactForm">
+          <form id="addContactForm" onsubmit="return false;">
             <input type="text" class="contforms" id="contactFirstName" placeholder="First Name" required> <br/>
             <input type="text" class="contforms" id="contactLastName" placeholder="Last Name" required> <br/>
             <input type="text" class="contforms" id="contactPhone" placeholder="Phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required> <br/>
@@ -47,6 +47,7 @@
                     </tbody>
                 </table>
             </div>
+            <h1 id="tableResult"></h1>
         </div>
     </body>
 </html>
