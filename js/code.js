@@ -39,7 +39,10 @@ function searchContacts() {
         if (this.readyState == 4 && this.status == 200) {
             let response = JSON.parse(xhr.responseText);
             if (response.error) {
-                document.getElementById("contactResult").innerHTML = response.error;
+                document.getElementById("tableResult").innerHTML = response.error;
+                setTimeout(function(){
+                        document.getElementById("tableResult").innerHTML = "";
+                }, 3000)
             } else {
                 updateContactTable(response.results); // Populate table
             }
