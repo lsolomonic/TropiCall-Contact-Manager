@@ -1,4 +1,4 @@
-# COP4331 Contact Manager (Team 8)
+# TropiCall Contact Manager (Team 8)
 
 ## Project Members: 
 
@@ -8,4 +8,6 @@ Zachary Kertesz (Project Manager)
 Bill Noel (API)  
 Lexi Solomonic (Front-End)  
 
-test
+## Functionality
+
+TropiCall Contact Manager allows all users to perform quick and intuitive operations to manage all of their contacts. Inline edit, add, and delete contact operations, along with a dynamically loaded table complete the basic CRUD (Create, Read, Update, Delete) requirements. 
