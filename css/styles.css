@@ -1,3 +1,4 @@
+/* ensure no whitespace */
 html,body
 {
     width: 100%;
@@ -163,6 +164,7 @@ hr {
     text-decoration: underline;
 }
 
+/*register fields*/
 #loginName, #loginPassword, #firstName, #lastName
 {
     width: 75%;
